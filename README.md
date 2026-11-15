@@ -3,7 +3,7 @@
 DS port of *Space Destroyers 3D* by AeEn123 (Scratch), based on the [3DS/PC port](https://github.com/AeEn123AI/space-destroyers-3d-port).
 
 **No assets or prebuilt ROMs are included**: the music is Sega's (SMS BIOS / Space Harrier), so it can't be
-redistributed here. Build it yourself from the original Scratch project, see Building below.
+redistributed here. Build it yourself from the original Scratch project, see the quick build guide below.
 
 Copy `dist/space_destroyer.nds` to your flashcart or SD card and start it from your kernel or TWiLight Menu++. It's a single
 file: music is embedded in the game's code, so it needs no argv, NitroFS or card access. Records are saved to `/data/space-destroyer/records.txt`
@@ -28,15 +28,18 @@ Closing the lid sleeps the DS: screens and sound off, a running game comes back 
 
 The top screen shows the game, the bottom screen has the HUD and touch menu.
 
-## Building
-Needs devkitPro (`dkp-pacman -S nds-dev`).
-
-    export DEVKITPRO=/opt/devkitpro
-    export DEVKITARM=$DEVKITPRO/devkitARM PATH=$DEVKITPRO/tools/bin:$PATH
-    # 1. in a checkout of the 3DS/PC port next to this one, put the Scratch project in as `Space Destroyers 3D.sb3`
-    #    and run `make assets` (see that repo's README)
-    # 2. generate this port's gen/ folder from those assets:
-    python3 tools/build_ds_assets.py ../space-destroyers-3d-port
-    make dist
+## Quick build guide
+1. **Build the 3DS/PC port's assets first.** Clone [space-destroyers-3d-port](https://github.com/AeEn123AI/space-destroyers-3d-port)
+   next to this repo, follow steps 1 and 2 of its quick build guide (get the `.sb3`, install the tools), then run
+   `make assets` in it.
+2. **Install devkitPro** ([guide](https://devkitpro.org/wiki/Getting_Started)), then `sudo dkp-pacman -S nds-dev`.
+3. **Build:**
+   ```sh
+   export DEVKITPRO=/opt/devkitpro
+   export DEVKITARM=$DEVKITPRO/devkitARM PATH=$DEVKITPRO/tools/bin:$PATH
+   python3 tools/build_ds_assets.py ../space-destroyers-3d-port   # makes gen/ from the port's assets
+   make dist                                                      # dist/space_destroyer.nds
+   ```
+4. Copy `dist/space_destroyer.nds` to your flashcart or SD card.
 
 Fonts baked into the ROM: Liberation Sans, DejaVu Sans, Grand9K Pixel. Their licences are in the 3DS/PC port's [`tools/fonts`](https://github.com/AeEn123AI/space-destroyers-3d-port/tree/main/tools/fonts).
